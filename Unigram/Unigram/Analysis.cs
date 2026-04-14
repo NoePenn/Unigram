@@ -96,34 +96,114 @@ namespace Unigram
 		/// <summary>
 		/// finds or calculates y value at x
 		/// </summary>
-		/// <para>Warning:  x must be between 1. and last x, else returns 0</para>
-		/// <returns>PointF with x and y</returns>
-		public PointF FindValueY(float x)
+		/// <para>Warning: x must be between 1. and last x, else returns empty PointF</para>
+		/// <returns>y as float</returns>
+		public float FindValueY(float x)
 		{
 			for( int i = 0; i < points.Count - 1; i++)
 			{
 		        PointF p1 = points[i];
 		        PointF p2 = points[i + 1];
 
-		        if (x >= p1.X && x <= p2.X)
+		        if(x >= p1.X && x <= p2.X)
 		        {
 		            float dx = p2.X - p1.X;
 		
 					// x = p1
-		            if (dx == 0) 
-		            	return p1;
+		            if(dx == 0) 
+		            	return p1.Y;
 					
 		            // % x zwischen p1 und p2
 		            float t = (x - p1.X) / dx;
 		
 		            float y = p1.Y + t * (p2.Y - p1.Y);
 		
-		            return new PointF(x, y);
+		            return y;
 		        }
 		    }
 		
 		    // x nicht zwischen x1 und xn 
-		    return PointF.Empty; 		
+		    return 0; 		
+		}
+		/// <summary>
+		/// Finds slope to next given point
+		/// </summary>
+		/// <para>Warning: x must be between 1. and last x, else returns 0
+		/// <returns>slope as float</returns>
+		public float Slope(float x)
+		{
+			if(x == points[ points.Count - 1].X)
+				return 0;
+			
+			float y = FindValueY(x);
+				 
+			for( int i = 0; i < points.Count - 1; i++)
+			{
+		        if(x >= points[i].X && x <= points[i + 1].X)
+		        {
+					float dx = points[i + 1].X - points[i].X;
+            		float dy = points[i + 1].Y - points[i].Y;
+					
+            		if (dx == 0) 
+            			continue; // nächster punkt wird gesucht
+
+            		return dy / dx; // (y2 - y1) / (x2 - x1)
+		        }
+			}
+			// nicht in list
+			return 0;
+		}
+		/// <summary>
+		/// area under curve from a to b
+		/// </summary>
+		/// <param name="a">start x</param>
+		/// <param name="b">end x</param>
+		/// <returns>aera as float</returns>
+		public float Integral(float a, float b)
+		{
+			if (a > b)
+				return -Integral(b, a);
+
+		    float area = 0;
+		
+		    for (int i = 0; i < points.Count - 1; i++)
+		    {
+		        float x1 = points[i].X;
+		        float x2 = points[i + 1].X;
+		
+		        float left = Math.Max(a, x1);
+		        float right = Math.Min(b, x2);
+		
+		        // Nur rechnen wenn zwischen a und b
+		        if (left < right)
+		        {
+		            float width = right - left;
+		
+		            float yLeft = FindValueY(left).Y;
+		            float yRight = FindValueY(right).Y;
+		
+		            float avgHeight = (yLeft + yRight) / 2.0f;
+		            area += width * avgHeight;
+		        }
+		    }
+		
+		    return area;
+		}
+		/// <summary>
+		/// area under total curve
+		/// </summary>
+		/// <returns>aera as float</returns>
+		public float Integral()
+		{
+			float area = 0;
+			
+			for (int i = 0; i < points.Count - 1; i++)
+			{
+				float width = points[i + 1].X - points[i].X;
+				float avgHeight = (points[i].Y + points[i + 1].Y) / 2;
+				area += width * avgHeight;
+			}
+			return area;
 		}
 	}
 }
