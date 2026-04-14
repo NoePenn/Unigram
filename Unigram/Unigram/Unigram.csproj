@@ -47,13 +47,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis.cs" />
+    <Compile Include="Graph.cs" />
+    <Compile Include="LinearTransformer.cs" />
+    <Compile Include="LogTransformer.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transformer.cs" />
     <Compile Include="Unigram.cs" />
+    <Compile Include="Viewport.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
