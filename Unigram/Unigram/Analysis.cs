@@ -13,12 +13,15 @@ using System.Collections.Generic;
 namespace Unigram
 {
 	/// <summary>
-	/// Description of Analysis.
+	/// Analyses a set of points
 	/// </summary>
 	public class Analysis
 	{
 		List <PointF> points = new List<PointF>();
-		
+		/// <summary>
+		/// x values must be sorted
+		/// </summary>
+		/// <param name="pointsMath">points that get analysed</param>
 		public Analysis(List <PointF> pointsMath)
 		{
 			points.AddRange( pointsMath);
@@ -179,8 +182,8 @@ namespace Unigram
 		        {
 		            float width = right - left;
 		
-		            float yLeft = FindValueY(left).Y;
-		            float yRight = FindValueY(right).Y;
+		            float yLeft = FindValueY(left);
+		            float yRight = FindValueY(right);
 		
 		            float avgHeight = (yLeft + yRight) / 2.0f;
 		            area += width * avgHeight;
@@ -204,6 +207,20 @@ namespace Unigram
 				area += width * avgHeight;
 			}
 			return area;
+		}
+		/// <summary>
+		/// finds all turning Points
+		/// </summary>
+		/// <returns>List of PointF</returns>
+		public List <PointF> TurningPoints()
+		{
+			List <PointF> turningPoints = new List<PointF>();
+			for( int i = 1; i < points.Count-1; i++)
+			{
+				if( (points[i-1].Y > points[i].Y && points[i+1].Y > points[i].Y ) || (points[i-1].Y < points[i].Y && points[i+1].Y < points[i].Y ) )
+					turningPoints.Add( points[i] );
+			}
+			return turningPoints;
 		}
 	}
 }
