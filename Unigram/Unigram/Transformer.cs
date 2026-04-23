@@ -7,16 +7,16 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Drawing;
+// using System.Drawing;
 
 namespace Unigram
 {
 	/// <summary>
-	/// Description of Transformer.
+	/// This class can convert mathematical points to pixel coordinates and viceversa, every time the coordinate system changes, UpdateTransformer() MUST be called.
 	/// </summary>
 	public class Transformer
 	{
-		int VPHeight { get; set; }
+	    int VPHeight { get; set; }
 		int VPWidth { get; set; }
 		
 		/// <summary>
@@ -42,38 +42,11 @@ namespace Unigram
 		/// <summary>
 		/// Returns the lowest value for Y (at the left of the graph) 
 		/// </summary>
-		float YMin { get; set {this.YMin = value; updateTransformer();} }
+		float YMin { get; set; }
 		/// <summary>
 		/// Returns the maximum value for Y (at the right of the graph)
 		/// </summary>
 		float YMax { get; set; }
-		
-		/// <summary>
-		/// Needs to be called every time the coordinate system changes
-		/// </summary>
-		private void updateTransformer()
-		{
-			
-		}
-			
-		PointF MathToPixel (PointF point) // VP: size in Pixels
-		{
-			
-		}
-		
-		
-		
-	}
-	public class Transformer
-	{
-	    public int VPHeight { get; set; }
-	    public int VPWidth  { get; set; }
-	    public bool XLog    { get; set; }
-	    public bool YLog    { get; set; }
-	    public float XMin   { get; set; }
-	    public float XMax   { get; set; }
-	    public float YMin   { get; set; }
-	    public float YMax   { get; set; }
 	
 	    // Precomputed in UpdateTransformer()
 	    private float _scaleX, _scaleY, _logXMin, _logYMin;
@@ -92,5 +65,16 @@ namespace Unigram
 	        float v = YLog ? ((float)Math.Log(point.Y) - _logYMin) * _scaleY : (point.Y - YMin) * _scaleY;
 	        return new PointF(u, VPHeight - v);
 	    }
+	    
+	    public PointF PixelToMath(PointF pixel)
+		{
+		    float u = pixel.X / _scaleX;
+		    float v = (VPHeight - pixel.Y) / _scaleY;
+		
+		    float x = XLog ? (float)Math.Exp(u + _logXMin) : u + XMin;
+		    float y = YLog ? (float)Math.Exp(v + _logYMin) : v + YMin;
+		
+		    return new PointF(x, y);
+		}
 	}
 }
