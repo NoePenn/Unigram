@@ -74,27 +74,27 @@ namespace Unigram
 		/// 
 		/// </summary>
 		/// <returns>1 if y is increasing as x is increasing</returns>
-		public int IsMonotomicIncreasing()
+		public bool IsMonotomicIncreasing()
 		{
 			for(int i = 0; i < points.Count - 1; i++)
 			{
 				if(points[i+1].Y < points[i].Y)
-					return 0;
+					return false;
 			}
-			return 1;
+			return true;
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns>1 if y is decreasing as x is increasing</returns>
-		public int IsMonotomicDecreasing()
+		public bool IsMonotomicDecreasing()
 		{
 			for(int i = 0; i < points.Count - 1; i++)
 			{
 				if(points[i+1].Y > points[i].Y)
-					return 0;
+					return false;
 			}
-			return 1;
+			return true;
 		}
 		/// <summary>
 		/// finds or calculates y value at x
@@ -218,7 +218,7 @@ namespace Unigram
 			List <PointF> turningPoints = new List<PointF>();
 			for( int i = 1; i < points.Count-1; i++)
 			{
-				if(points[i-1].Y + offset > points[i].Y && points[i+1].Y + offset > points[i].Y ) || (points[i-1].Y - offset < points[i].Y && points[i+1].Y - offset < points[i].Y ) )
+				if ((points[i-1].Y + offset > points[i].Y && points[i+1].Y + offset > points[i].Y ) || (points[i-1].Y - offset < points[i].Y && points[i+1].Y - offset < points[i].Y ) )
 					turningPoints.Add( points[i] );
 			}
 			return turningPoints;
@@ -290,7 +290,7 @@ namespace Unigram
 		/// <returns>geometric Mean as float</returns>
 		public float GeometricMean() //mit ln summe
 		{
-			if( IsStrictlyPositive() == 0)
+			if( IsStrictlyPositive() == false)
 				return 0;
 			float sum = 0;
 			for(int i = 0; i < points.Count; i++)
@@ -303,7 +303,7 @@ namespace Unigram
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public int IsStrictlyPositive()
+		public bool IsStrictlyPositive()
 		{
 			int isStrictlyPositive = 0;
 			for(int i = 0; i < points.Count; i++)
@@ -312,8 +312,52 @@ namespace Unigram
 					isStrictlyPositive++;
 			}
 			if( isStrictlyPositive == points.Count)
-				return 1;
-		return 0;
+				return true;
+		return false;
+		}
+		/// <summary>
+		/// Berechnet die durchschnittliche Periode (T) der Daten.
+		/// Die Periode ist der X-Abstand, nach dem sich das Signal wiederholt.
+		/// </summary>
+		public float Period()
+		{
+		    float mean = ArithmeticMean();
+		    List<float> crossX = new List<float>();
+		
+		    // wo Kurve den Mittelwert schneidet
+		    for (int i = 0; i < points.Count - 1; i++)
+		    {
+		        if (points[i].Y < mean && points[i + 1].Y >= mean)
+		        {
+		            // Lineare Interpolation 
+		            float dx = points[i + 1].X - points[i].X;
+		            float dy = points[i + 1].Y - points[i].Y;
+		            float preciseX = points[i].X + (mean - points[i].Y) * (dx / dy);
+		            crossX.Add(preciseX);
+		        }
+		    }
+		
+		    if (crossX.Count < 2) 
+		    	return 0; // Nicht genug Daten für eine Periode
+		
+		    float sumDist = 0;
+		    for (int i = 0; i < crossX.Count - 1; i++)
+		    {
+		        sumDist += (crossX[i + 1] - crossX[i]);
+		    }
+		
+		    return sumDist / (crossX.Count - 1);
+		}
+		
+		/// <summary>
+		/// Frequency (f = 1/T)
+		/// </summary>
+		public float Frequency()
+		{
+		    float period = Period();
+		    if (period == 0) 
+		    	return 0;
+		    return 1.0f / period;
 		}
 	}
 }
