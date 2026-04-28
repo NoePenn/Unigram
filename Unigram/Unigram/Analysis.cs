@@ -211,16 +211,109 @@ namespace Unigram
 		/// <summary>
 		/// finds all turning Points
 		/// </summary>
+		/// <param = "offset"> what must be min offset to be turningPoint</param>
 		/// <returns>List of PointF</returns>
-		public List <PointF> TurningPoints()
+		public List <PointF> TurningPoints(float offset)
 		{
 			List <PointF> turningPoints = new List<PointF>();
 			for( int i = 1; i < points.Count-1; i++)
 			{
-				if( (points[i-1].Y > points[i].Y && points[i+1].Y > points[i].Y ) || (points[i-1].Y < points[i].Y && points[i+1].Y < points[i].Y ) )
+				if(points[i-1].Y + offset > points[i].Y && points[i+1].Y + offset > points[i].Y ) || (points[i-1].Y - offset < points[i].Y && points[i+1].Y - offset < points[i].Y ) )
 					turningPoints.Add( points[i] );
 			}
 			return turningPoints;
+		}
+		/// <summary>
+		/// adds new point to list
+		/// </summary>
+		/// <param name="addPoint"> new PointF</param>
+		public void AddPoint( PointF addPoint)
+		{
+			points.Add( addPoint);
+		}
+		/// <summary>
+		/// standart devitation
+		/// </summary>
+		/// <returns>standart devitation as float</returns>
+		public float StandartDevitation()
+		{
+			float sum = 0;
+			for(int i = 0; i < points.Count; i++)
+			{
+				sum += ( points[i].Y - ArithmeticMean() ) * ( points[i].Y - ArithmeticMean() );
+			}
+			return (float)Math.Sqrt(sum / points.Count);
+		}
+		/// <summary>
+		/// calculates lengh of path if points are connected
+		/// </summary>
+		/// <returns>lengh as float</returns>
+		public float PathLength()
+		{
+			float pathLength = 0;
+			for (int i = 0; i < points.Count - 1; i++)
+			{
+				float dx = points[i + 1].X - points[i].X;
+				float dy = points[i + 1].Y - points[i].Y;
+				pathLength += (float)Math.Sqrt(dx * dx + dy * dy);
+			}
+			return pathLength;
+		}
+		/// <summary>
+		/// finds Points where Y = 0
+		/// </summary>
+		/// <returns>List of PointF</returns>
+		public List<PointF> InterceptsX()
+		{
+			List<PointF> interceptsX = new List<PointF>();
+			for (int i = 0; i < points.Count - 1; i++)
+			{
+				if ((points[i].Y > 0 && points[i+1].Y < 0) || (points[i].Y < 0 && points[i+1].Y > 0))
+				{
+					float dx = points[i+1].X - points[i].X;
+					float dy = points[i+1].Y - points[i].Y;
+					// Lineare interpolation
+					PointF rootX = new PointF( points[i].X - points[i].Y * (dx / dy), 0);
+					interceptsX.Add(rootX);
+				}
+				else if (points[i].Y == 0) 
+				{
+					interceptsX.Add(points[i]);
+				}
+			}
+			return interceptsX;
+		}
+		/// <summary>
+		/// finds geometric Mean with sum of ln formula
+		/// <para>Only works if values are greater than zero</para>
+		/// </summary>
+		/// <returns>geometric Mean as float</returns>
+		public float GeometricMean() //mit ln summe
+		{
+			if( IsStrictlyPositive() == 0)
+				return 0;
+			float sum = 0;
+			for(int i = 0; i < points.Count; i++)
+			{
+				sum += (float)Math.Log( points[i].Y);
+			}
+			return (float)Math.Pow( Math.E, 1.0/points.Count * sum);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public int IsStrictlyPositive()
+		{
+			int isStrictlyPositive = 0;
+			for(int i = 0; i < points.Count; i++)
+			{
+				if(points[i].Y > 0)
+					isStrictlyPositive++;
+			}
+			if( isStrictlyPositive == points.Count)
+				return 1;
+		return 0;
 		}
 	}
 }
