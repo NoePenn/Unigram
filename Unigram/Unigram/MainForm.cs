@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Unigram;
 
 namespace Unigram
 {
@@ -18,8 +19,10 @@ namespace Unigram
 	/// </summary>
 	public partial class MainForm : Form
 	{
+		Viewport v;
 		public MainForm()
 		{
+
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
@@ -28,6 +31,7 @@ namespace Unigram
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			v = new Viewport();
 		}
 	}
 }
