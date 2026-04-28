@@ -29,21 +29,21 @@ namespace Unigram
 	    // Precomputed in UpdateTransformer()
 	    private float _scaleX, _scaleY, _logXMin, _logYMin;
 		
-	    Transformer(){
+	    public Transformer(){
 	    	XLog = false;
 	    	YLog = false;
 	    	
-	    	XMin = 	5;
+	    	XMin = 	-5;
 	    	XMax = 5;
 	    	
-	    	YMin = 	5;
+	    	YMin = 	-5;
 	    	YMax = 5;
 		}
 	    
 	    public void UpdateTransformer()
 	    {
 	        _scaleX  = XLog ? VPWidthPX  / (float)Math.Log(XMax / XMin) : VPWidthPX  / (XMax - XMin);
-	        _scaleY  = YLog ? VPHeightPX / (float)Math.Log(YMax / YMin) : VPWidthPX / (YMax - YMin);
+	        _scaleY  = YLog ? VPHeightPX / (float)Math.Log(YMax / YMin) : VPHeightPX / (YMax - YMin);
 	        _logXMin = XLog ? (float)Math.Log(XMin) : 0;
 	        _logYMin = YLog ? (float)Math.Log(YMin) : 0;
 	    }
