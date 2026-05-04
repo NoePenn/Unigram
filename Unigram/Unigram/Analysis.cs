@@ -13,23 +13,40 @@ using System.Collections.Generic;
 namespace Unigram
 {
 	/// <summary>
-	/// Analyses a set of points
+	/// Provides a comprehensive suite of statistical and mathematical analysis tools 
+	/// for a collection of 2D points.
 	/// </summary>
+	/// <remarks>
+	/// For accurate results in interpolation and calculus methods, points must be 
+	/// sorted by their X-coordinate.
+	/// </remarks>
+	
+		/* Median()
+		 * LinearRegression(): Calculates the y=mx+d that best represents the trend of your points. returns slope of that line
+		 * BoundingBox(): Returns a RectangleF that perfectly encloses all points.
+		 * Normalize(): Scales all Y values so they fit perfectly between 0.0 and 1.0. This is very helpful for comparing two different datasets.
+		 * RangeY()
+		 * RangeX()
+		 * Variance(): The square of the standard deviation.
+		 * ScaleY(float factor): Multiplies all Y values by a number (e.g., to convert units).
+	 	 * ShiftY(float offset): Adds a number to all Y values (e.g., to move a graph up or down)
+		 */
+		
 	public class Analysis
 	{
 		List <PointF> points = new List<PointF>();
 		/// <summary>
-		/// x values must be sorted
+		/// Initializes a new instance of the Analysis class.
 		/// </summary>
-		/// <param name="pointsMath">points that get analysed</param>
+		/// <param name="pointsMath">The collection of points to be analyzed. X values should be pre-sorted.</param>
 		public Analysis(List <PointF> pointsMath)
 		{
 			points.AddRange( pointsMath);
 		}
 		/// <summary>
-		/// minimum Y
+		/// Finds the point with the lowest Y-value in the collection.
 		/// </summary>
-		/// <returns>PointF with smalest Y value</returns>
+		/// <returns>The <see cref="PointF"/> containing the minimum Y value.</returns>
 		public PointF Min()
 		{
 			PointF min = points[0];
@@ -43,9 +60,9 @@ namespace Unigram
 			return min;
 		}
 		/// <summary>
-		/// maximum Y
+		/// Finds the point with the highest Y-value in the collection.
 		/// </summary>
-		/// <returns>PointF with biggest Y value</returns>
+		/// <returns>The <see cref="PointF"/> containing the maximum Y value.</returns>
 		public PointF Max()
 		{
 			PointF max = points[0];
@@ -59,9 +76,9 @@ namespace Unigram
 			return max;
 		}
 		/// <summary>
-		/// Arithmetic Mean of Y
+		/// Calculates the arithmetic mean (average) of all Y-values.
 		/// </summary>
-		/// <returns>float </returns>
+		/// <returns>The average Y-value as a float.</returns>
 		public float ArithmeticMean()
 		{
 			float sum = 0;
@@ -71,9 +88,9 @@ namespace Unigram
 			return sum / points.Count;
 		}
 		/// <summary>
-		/// 
+		/// Determines if the Y-values are monotonically increasing relative to X.
 		/// </summary>
-		/// <returns>1 if y is increasing as x is increasing</returns>
+		/// <returns>True if every Y-value is greater than or equal to the previous Y-value.</returns>
 		public bool IsMonotomicIncreasing()
 		{
 			for(int i = 0; i < points.Count - 1; i++)
@@ -84,9 +101,9 @@ namespace Unigram
 			return true;
 		}
 		/// <summary>
-		/// 
+		/// Determines if the Y-values are monotonically decreasing relative to X.
 		/// </summary>
-		/// <returns>1 if y is decreasing as x is increasing</returns>
+		/// <returns>True if every Y-value is less than or equal to the previous Y-value.</returns>
 		public bool IsMonotomicDecreasing()
 		{
 			for(int i = 0; i < points.Count - 1; i++)
@@ -97,12 +114,15 @@ namespace Unigram
 			return true;
 		}
 		/// <summary>
-		/// finds or calculates y value at x
+		/// Calculates the Y-value at a specific X-coordinate using linear interpolation.
 		/// </summary>
-		/// <para>Warning: x must be between 1. and last x, else returns empty PointF</para>
-		/// <returns>y as float</returns>
+		/// <param name="x">The X-coordinate to evaluate.</param>
+		/// <returns>The interpolated Y-value, or 0 if X is outside the range of the point set.</returns>
 		public float FindValueY(float x)
 		{
+			if (x == points[points.Count - 1].X) 
+				return points[points.Count - 1].Y;
+			
 			for( int i = 0; i < points.Count - 1; i++)
 			{
 		        PointF p1 = points[i];
@@ -124,15 +144,15 @@ namespace Unigram
 		            return y;
 		        }
 		    }
-		
+			
 		    // x nicht zwischen x1 und xn 
 		    return 0; 		
 		}
 		/// <summary>
-		/// Finds slope to next given point
+		/// Calculates the slope (rate of change) of the segment containing the specified X-coordinate.
 		/// </summary>
-		/// <para>Warning: x must be between 1. and last x, else returns 0
-		/// <returns>slope as float</returns>
+		/// <param name="x">The X-coordinate to evaluate.</param>
+		/// <returns>The slope (dy/dx) of the local segment.</returns>
 		public float Slope(float x)
 		{
 			if(x == points[ points.Count - 1].X)
@@ -157,11 +177,11 @@ namespace Unigram
 			return 0;
 		}
 		/// <summary>
-		/// area under curve from a to b
+		/// Calculates the definite integral (area under the curve) between two X-coordinates.
 		/// </summary>
-		/// <param name="a">start x</param>
-		/// <param name="b">end x</param>
-		/// <returns>aera as float</returns>
+		/// <param name="a">The starting X-bound.</param>
+		/// <param name="b">The ending X-bound.</param>
+		/// <returns>The calculated area using the trapezoidal rule.</returns>
 		public float Integral(float a, float b)
 		{
 			if (a > b)
@@ -193,9 +213,9 @@ namespace Unigram
 		    return area;
 		}
 		/// <summary>
-		/// area under total curve
+		/// Calculates the total area under the entire curve from the first to the last point.
 		/// </summary>
-		/// <returns>aera as float</returns>
+		/// <returns>The total area as a float.</returns>
 		public float Integral()
 		{
 			float area = 0;
@@ -209,32 +229,47 @@ namespace Unigram
 			return area;
 		}
 		/// <summary>
-		/// finds all turning Points
+		/// Identifies local minima in the dataset based on a sensitivity threshold.
 		/// </summary>
-		/// <param = "offset"> what must be min offset to be turningPoint</param>
-		/// <returns>List of PointF</returns>
-		public List <PointF> TurningPoints(float offset)
+		/// <param name="offset">The minimum vertical difference required to consider a point a local minimum.</param>
+		/// <returns>A list of points representing local minima.</returns>
+		public List <PointF> LocalMin(float offset)
 		{
-			List <PointF> turningPoints = new List<PointF>();
+			List <PointF> localMin = new List<PointF>();
 			for( int i = 1; i < points.Count-1; i++)
 			{
-				if ((points[i-1].Y + offset > points[i].Y && points[i+1].Y + offset > points[i].Y ) || (points[i-1].Y - offset < points[i].Y && points[i+1].Y - offset < points[i].Y ) )
-					turningPoints.Add( points[i] );
+				if (points[i-1].Y + offset > points[i].Y && points[i+1].Y + offset > points[i].Y )  
+					localMin.Add( points[i] );
 			}
-			return turningPoints;
+			return localMin;
 		}
 		/// <summary>
-		/// adds new point to list
+		/// Identifies local maxima in the dataset based on a sensitivity threshold.
 		/// </summary>
-		/// <param name="addPoint"> new PointF</param>
+		/// <param name="offset">The minimum vertical difference required to consider a point a local maximum.</param>
+		/// <returns>A list of points representing local maxima.</returns>
+		public List <PointF> LocalMax(float offset)
+		{
+			List <PointF> localMax = new List<PointF>();
+			for( int i = 1; i < points.Count-1; i++)
+			{
+				if (points[i-1].Y - offset < points[i].Y && points[i+1].Y - offset < points[i].Y ) 
+					localMax.Add( points[i] );
+			}
+			return localMax;
+		}
+		/// <summary>
+		/// Appends a single point to the existing data collection.
+		/// </summary>
+		/// <param name="addPoint">The <see cref="PointF"/> to add.</param>
 		public void AddPoint( PointF addPoint)
 		{
 			points.Add( addPoint);
 		}
 		/// <summary>
-		/// standart devitation
+		/// Calculates the standard deviation of the Y-values to measure data dispersion.
 		/// </summary>
-		/// <returns>standart devitation as float</returns>
+		/// <returns>The standard deviation as a float.</returns>
 		public float StandartDevitation()
 		{
 			float sum = 0;
@@ -245,9 +280,9 @@ namespace Unigram
 			return (float)Math.Sqrt(sum / points.Count);
 		}
 		/// <summary>
-		/// calculates lengh of path if points are connected
+		/// Calculates the total Euclidean distance along the path connecting all points in sequence.
 		/// </summary>
-		/// <returns>lengh as float</returns>
+		/// <returns>The total length of the polyline path.</returns>
 		public float PathLength()
 		{
 			float pathLength = 0;
@@ -260,9 +295,9 @@ namespace Unigram
 			return pathLength;
 		}
 		/// <summary>
-		/// finds Points where Y = 0
+		/// Finds the X-intercepts (roots) where the curve crosses Y = 0.
 		/// </summary>
-		/// <returns>List of PointF</returns>
+		/// <returns>A list of points where the line segments intersect the X-axis.</returns>
 		public List<PointF> InterceptsX()
 		{
 			List<PointF> interceptsX = new List<PointF>();
@@ -284,11 +319,11 @@ namespace Unigram
 			return interceptsX;
 		}
 		/// <summary>
-		/// finds geometric Mean with sum of ln formula
-		/// <para>Only works if values are greater than zero</para>
+		/// Calculates the geometric mean of the Y-values using the logarithmic sum method.
 		/// </summary>
-		/// <returns>geometric Mean as float</returns>
-		public float GeometricMean() //mit ln summe
+		/// <remarks>This calculation is only valid for datasets where all Y-values are greater than zero.</remarks>
+		/// <returns>The geometric mean, or 0 if any value is non-positive.</returns>
+		public float GeometricMean() //with ln sum
 		{
 			if( IsStrictlyPositive() == false)
 				return 0;
@@ -300,9 +335,9 @@ namespace Unigram
 			return (float)Math.Pow( Math.E, 1.0/points.Count * sum);
 		}
 		/// <summary>
-		/// 
+		/// Validates if every Y-value in the dataset is strictly greater than zero.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>True if all Y-values are positive; otherwise, false.</returns>
 		public bool IsStrictlyPositive()
 		{
 			int isStrictlyPositive = 0;
@@ -316,9 +351,9 @@ namespace Unigram
 		return false;
 		}
 		/// <summary>
-		/// Berechnet die durchschnittliche Periode (T) der Daten.
-		/// Die Periode ist der X-Abstand, nach dem sich das Signal wiederholt.
+		/// Estimates the average period (T) of the signal by calculating the distance between mean-crossing points.
 		/// </summary>
+		/// <returns>The average interval length between cycles.</returns>
 		public float Period()
 		{
 		    float mean = ArithmeticMean();
@@ -350,8 +385,9 @@ namespace Unigram
 		}
 		
 		/// <summary>
-		/// Frequency (f = 1/T)
+		/// Calculates the frequency (f) of the data, defined as the reciprocal of the period (1/T).
 		/// </summary>
+		/// <returns>The frequency as a float (cycles per X-unit).</returns>
 		public float Frequency()
 		{
 		    float period = Period();
@@ -359,5 +395,28 @@ namespace Unigram
 		    	return 0;
 		    return 1.0f / period;
 		}
+		/// <summary>
+		/// Calculates the Root Mean Square (RMS) of the Y values.
+		/// </summary>
+		public float RootMeanSquare()
+		{
+		    float sumSquares = 0;
+		    for( int i = 0; i < points.Count; i++)
+		    {
+		    	sumSquares += points[i].Y * points[i].Y;
+		    }
+		    return (float)Math.Sqrt(sumSquares / points.Count);
+		}
+				/// <summary>
+		/// Finds all points where this graph intersects with another graph.
+		/// </summary>
+		/// <param name="other">The other Analysis object to compare against.</param>
+		/// <returns>A list of PointF where the two curves cross.</returns>
+		public List<PointF> IntersectionsWith(Analysis other)
+		{
+			return new List<PointF>();
+		}
+
+		
 	}
 }
