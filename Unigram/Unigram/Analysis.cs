@@ -34,9 +34,17 @@ namespace Unigram
 		/// <summary>
 		/// Initializes a new instance of the Analysis class.
 		/// </summary>
-		/// <param name="pointsMath">The collection of points to be analyzed. X values should be pre-sorted.</param>
 		public Analysis()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the Analysis class.
+		/// </summary>
+		/// <param name="pointsMath">The collection of points to be analyzed. X values should be pre-sorted.</param>
+		public Analysis(List <PointF> pointsMath)
+		{
+			points.AddRange( pointsMath);
 		}
 		/// <summary>
 		/// Finds the point with the lowest Y-value in the collection.
