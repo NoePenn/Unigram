@@ -25,6 +25,18 @@ namespace Unigram
 		{
 		}
 
+		public int AddGraph(Color color)
+		{
+			int idx = this.graphs.Count;
+			this.graphs.Add(new Graph(color));
+			return idx;
+		}
+
+		public void AddPoint(int graphIdx, PointF point)
+		{
+			this.graphs[graphIdx].AddPoint(point, this.transformer);
+		}
+
 		void UpdateTransformerPixel(int width, int height) {
 			if (transformer.VPWidthPX != width || transformer.VPHeightPX != width) {
 				transformer.VPWidthPX = width;
@@ -36,7 +48,7 @@ namespace Unigram
 			}
 		}
 
-		void Paint(int width, int height, Graphics g) {
+		public void Paint(int width, int height, Graphics g) {
 			this.UpdateTransformerPixel(width, height);
 			this.viewport.PaintCoordinateSystem(transformer, g);
 			for (int i = 0; i < graphs.Count; i++)  {
