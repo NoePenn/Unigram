@@ -38,7 +38,12 @@ namespace Unigram
 			points.Add(point);
 			plotPoints.Add(transformer.MathToPixel(point));
 			Analysis.AddPoint(point);
-			
+		}
+
+		public void UpdatePlot(Transformer transformer) {
+			for (int i = 0; i < this.Points.Count; i++) {
+				this.PlotPoints[i] = transformer.MathToPixel(this.Points[i]);
+			}
 		}
 	}
 }
