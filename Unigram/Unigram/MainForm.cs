@@ -19,7 +19,7 @@ namespace Unigram
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		Viewport v;
+		Unigram u;
 		public MainForm()
 		{
 
@@ -31,7 +31,14 @@ namespace Unigram
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
-			v = new Viewport();
+			
+			u = new Unigram();
+			int graph = u.AddGraph(Color.Red);
+			
+			for (float x = -5; x <= 5; x += 0.01f)
+			{
+				u.AddPoint(graph, new PointF(x, (float)Math.Sin(x)));
+			}
 		}
 	}
 }

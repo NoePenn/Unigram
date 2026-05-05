@@ -35,6 +35,8 @@ namespace Unigram
 	    	
 	    	YMin = 	-5;
 	    	YMax = 5;
+	    	
+	    	UpdateTransformer();
 		}
 	    
 	    // Precomputed in UpdateTransformer()

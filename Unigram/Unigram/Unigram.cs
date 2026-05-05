@@ -23,6 +23,9 @@ namespace Unigram
 
 		public Unigram()
 		{
+			viewport = new Viewport();
+			graphs = new List<Graph>();
+			transformer = new Transformer();
 		}
 
 		public int AddGraph(Color color)
@@ -52,7 +55,7 @@ namespace Unigram
 			this.UpdateTransformerPixel(width, height);
 			this.viewport.PaintCoordinateSystem(transformer, g);
 			for (int i = 0; i < graphs.Count; i++)  {
-				this.viewport.PaintGraph(this.graphs[i]);
+				this.viewport.PaintGraph(this.graphs[i], g);
 			}
 		}
 	}

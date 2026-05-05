@@ -65,7 +65,7 @@ namespace Unigram
 			this.trackBar1.Name = "trackBar1";
 			this.trackBar1.Size = new System.Drawing.Size(710, 69);
 			this.trackBar1.TabIndex = 1;
-			this.trackBar1.Value = 50;
+			this.trackBar1.Value = 10;
 			this.trackBar1.Scroll += new System.EventHandler(this.TrackBar1Scroll);
 			// 
 			// MainForm
@@ -90,8 +90,8 @@ namespace Unigram
 		{
 			if ((e != null) && (e.ClipRectangle != null)) {
 			}
-			v.PixelCrafter(e, e.ClipRectangle.Width, e.ClipRectangle.Height, trackBarValue);
-
+			// v.PixelCrafter(e, e.ClipRectangle.Width, e.ClipRectangle.Height, trackBarValue);
+			u.Paint(e.ClipRectangle.Width, e.ClipRectangle.Height, e.Graphics);
 		}
 		
 		void Button1Click(object sender, System.EventArgs e)
