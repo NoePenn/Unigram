@@ -12,9 +12,9 @@ namespace Unigram
 		List <PointF> plotPoints = new List<PointF>();
 		Analysis analysis;
 		
-		public Graph(Color color, Analysis analysis) {
+		public Graph(Color color) {
 			this.Color = color;
-			this.analysis = analysis;
+			this.analysis = new Analysis();
 		}	
 		
 		/// <summary>
