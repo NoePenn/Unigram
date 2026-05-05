@@ -21,15 +21,11 @@ namespace Unigram
 	/// sorted by their X-coordinate.
 	/// </remarks>
 	
-		/* Median()
+		/* 
 		 * LinearRegression(): Calculates the y=mx+d that best represents the trend of your points. returns slope of that line
 		 * BoundingBox(): Returns a RectangleF that perfectly encloses all points.
-		 * Normalize(): Scales all Y values so they fit perfectly between 0.0 and 1.0. This is very helpful for comparing two different datasets.
-		 * RangeY()
-		 * RangeX()
-		 * Variance(): The square of the standard deviation.
-		 * ScaleY(float factor): Multiplies all Y values by a number (e.g., to convert units).
-	 	 * ShiftY(float offset): Adds a number to all Y values (e.g., to move a graph up or down)
+		 * //ScaleY(float factor): Multiplies all Y values by a number (e.g., to convert units).
+	 	 * //ShiftY(float offset): Adds a number to all Y values (e.g., to move a graph up or down)
 		 */
 		
 	public class Analysis
@@ -39,8 +35,9 @@ namespace Unigram
 		/// Initializes a new instance of the Analysis class.
 		/// </summary>
 		/// <param name="pointsMath">The collection of points to be analyzed. X values should be pre-sorted.</param>
-		public Analysis()
+		public Analysis(List <PointF> pointsMath)
 		{
+			points.AddRange( pointsMath);
 		}
 		/// <summary>
 		/// Finds the point with the lowest Y-value in the collection.
@@ -266,17 +263,25 @@ namespace Unigram
 			points.Add( addPoint);
 		}
 		/// <summary>
-		/// Calculates the standard deviation of the Y-values to measure data dispersion.
+		/// Calculates the variance of the Y-values.
 		/// </summary>
-		/// <returns>The standard deviation as a float.</returns>
-		public float StandartDevitation()
+		/// <returns>The variance as a float.</returns>
+		public float Variance()
 		{
 			float sum = 0;
 			for(int i = 0; i < points.Count; i++)
 			{
 				sum += ( points[i].Y - ArithmeticMean() ) * ( points[i].Y - ArithmeticMean() );
 			}
-			return (float)Math.Sqrt(sum / points.Count);
+			return sum / points.Count;
+		}
+		/// <summary>
+		/// Calculates the standard deviation of the Y-values to measure data dispersion. 
+		/// </summary>
+		/// <returns>The standard deviation as a float.</returns>
+		public float StandardDevitation()
+		{
+			return (float)Math.Sqrt( Variance() );
 		}
 		/// <summary>
 		/// Calculates the total Euclidean distance along the path connecting all points in sequence.
@@ -406,7 +411,7 @@ namespace Unigram
 		    }
 		    return (float)Math.Sqrt(sumSquares / points.Count);
 		}
-				/// <summary>
+		/*/// <summary>
 		/// Finds all points where this graph intersects with another graph.
 		/// </summary>
 		/// <param name="other">The other Analysis object to compare against.</param>
@@ -414,8 +419,83 @@ namespace Unigram
 		public List<PointF> IntersectionsWith(Analysis other)
 		{
 			return new List<PointF>();
+		}*/
+		/// <summary>
+		/// Internal helper to calculate the first derivative of a specific list of points.
+		/// </summary>
+		/// <param name="pointsDerivative">List of points to differentiate.</param>
+		/// <returns>A list of points representing the first derivative (slope at each point).</returns>
+		private static List<PointF> FirstDerivative( List<PointF> pointsDerivative)
+		{
+			List<PointF> derivative = new List<PointF>();
+			Analysis analysis = new Analysis( pointsDerivative);
+			for(int i = 0; i < pointsDerivative.Count - 1; i++)
+			{
+				derivative.Add( new PointF( pointsDerivative[i].X, analysis.Slope( pointsDerivative[i].X) ) );
+			}
+			return derivative;
 		}
-
-		
+		/// <summary>
+		/// Calculates the n-th order derivative of the dataset.
+		/// </summary>
+		/// <param name="degree">The order of the derivative (e.g., 1 for first derivative, 2 for second).</param>
+		/// <returns>A list of points representing the resulting derivative.</returns>
+		public List<PointF> Derivative(int degree)
+		{
+			List<PointF> result = this.points;
+			
+			for (int i = 0; i < degree; i++) 
+			{
+				result = FirstDerivative(result);
+			}
+			return result;
+			/*switch (degree) 
+			{
+				case 1:
+					return FirstDerivative(points);
+				case 2:
+					return FirstDerivative(FirstDerivative(points) );
+				case 3:
+					return FirstDerivative(FirstDerivative(FirstDerivative(points) ) );
+				
+				default:
+					return points
+			}*/
+		}
+		/// <summary>
+		/// Calculates the horizontal range of the dataset.
+		/// </summary>
+		/// <returns>The difference between the maximum and minimum X-values.</returns>
+		public float RangeX()
+		{
+			return points[points.Count - 1].X - points[0].X;
+		}
+		/// <summary>
+		/// Calculates the vertical range (peak-to-peak) of the dataset.
+		/// </summary>
+		/// <returns>The difference between the maximum and minimum Y-values.</returns>
+		public float RangeY()
+		{
+			return Max().Y - Min().Y;
+		}
+		/// <summary>
+		/// Normalizes the Y-values of the dataset so they range between -1 and 1.
+		/// </summary>
+		/// <returns>A new list of points where Y-values are scaled relative to the maximum absolute Y-value.</returns>
+		public List<PointF> Normalize()
+		{
+			List <PointF> normalize = new List<PointF>();
+			float max = (float)Math.Max( Math.Abs( Max().Y ), Math.Abs( Min().Y ) );
+			/*if( Math.Abs(Max().Y ) > Math.Abs(Min().Y ) )
+				max = Math.Abs( Max().Y );
+			else 
+				max = Math.Abs( Min().Y );
+			*/
+			for( int i  = 0; i < points.Count; i++)
+			{
+				normalize.Add( new PointF( points[i].X, points[i].Y / max ) );
+			}
+			return normalize;
+		}
 	}
 }
