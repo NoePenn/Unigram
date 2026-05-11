@@ -34,6 +34,17 @@ namespace Unigram
 			this.graphs.Add(new Graph(color));
 			return idx;
 		}
+		public void Slider(float sliderXMax, float sliderXMin, float sliderYMax, float sliderYMin){
+			transformer.XMax = sliderXMax;
+			transformer.XMin = sliderXMin;
+			transformer.YMax = sliderYMax;
+			transformer.YMin = sliderYMin;
+			transformer.UpdateTransformer();
+		}
+		public PointF PixelToMath(float x, float y) {
+		    return transformer.PixelToMath(new PointF(x, y));
+		}
+		
 
 		public void AddPoint(int graphIdx, PointF point)
 		{
