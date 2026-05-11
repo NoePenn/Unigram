@@ -42,6 +42,29 @@ namespace Unigram
             };
 
             button1.Cursor = Cursors.Hand;
+            button1.Cursor = Cursors.Hand;          
+			button1.MouseWheel += (s, ev) => {
+		    float zoomFactor = ev.Delta > 0 ? 0.9f : 1.1f;
+		    PointF mouseInMath = u.PixelToMath(ev.X, ev.Y);
+		    float currentWidth = trackBarXMaxValue - trackBarXMinValue;
+		    float currentHeight = trackBarYMaxValue - trackBarYMinValue;
+		    float newWidth = currentWidth * zoomFactor;
+		    float newHeight = currentHeight * zoomFactor;
+		    float relativeX = (mouseInMath.X - trackBarXMinValue) / currentWidth;
+		    float relativeY = (mouseInMath.Y - trackBarYMinValue) / currentHeight;
+		    trackBarXMinValue = mouseInMath.X - (relativeX * newWidth);
+		    trackBarXMaxValue = trackBarXMinValue + newWidth;
+		    trackBarYMinValue = mouseInMath.Y - (relativeY * newHeight);
+		    trackBarYMaxValue = trackBarYMinValue + newHeight;
+		    u.Slider(trackBarXMaxValue, trackBarXMinValue, 
+		             trackBarYMaxValue, trackBarYMinValue);
+		    button1.Invalidate();
+			};
+			
+			// Wichtig: Damit das MouseWheel-Event gefeuert wird, muss der Button fokussierbar sein
+			button1.MouseEnter += (s, ev) => {
+			    button1.Focus();
+			};
         }
     }
 }

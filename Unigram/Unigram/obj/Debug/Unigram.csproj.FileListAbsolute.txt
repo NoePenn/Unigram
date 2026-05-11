@@ -5,3 +5,10 @@ C:\Users\noepe\Documents\Schule\Automation\Unigram\Unigram\Unigram\Unigram\bin\D
 C:\Users\noepe\Documents\Schule\Automation\Unigram\Unigram\Unigram\Unigram\bin\Debug\Unigram.pdb
 C:\Users\noepe\Documents\Schule\Automation\Unigram\Unigram\Unigram\Unigram\obj\Debug\Unigram.exe
 C:\Users\noepe\Documents\Schule\Automation\Unigram\Unigram\Unigram\Unigram\obj\Debug\Unigram.pdb
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\bin\Debug\Unigram.exe
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\bin\Debug\Unigram.pdb
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\obj\Debug\Unigram.csprojResolveAssemblyReference.cache
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\obj\Debug\Unigram.MainForm.resources
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\obj\Debug\Unigram.csproj.GenerateResource.Cache
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\obj\Debug\Unigram.exe
+C:\Users\grube\OneDrive\Dokumente\GitHub\Unigram\Unigram\Unigram\obj\Debug\Unigram.pdb
