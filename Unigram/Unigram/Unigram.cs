@@ -17,13 +17,13 @@ namespace Unigram
 	/// </summary>
 	public class Unigram
 	{
-		Viewport viewport;
+		public Viewport Viewport { get; private set; }
 		List<Graph> graphs;
 		Transformer transformer;
 
 		public Unigram()
 		{
-			viewport = new Viewport();
+			Viewport = new Viewport();
 			graphs = new List<Graph>();
 			transformer = new Transformer();
 		}
@@ -34,44 +34,66 @@ namespace Unigram
 			this.graphs.Add(new Graph(color));
 			return idx;
 		}
-		public void Slider(float sliderXMax, float sliderXMin, float sliderYMax, float sliderYMin){
-			transformer.XMax = sliderXMax;
-			transformer.XMin = sliderXMin;
-			transformer.YMax = sliderYMax;
-			transformer.YMin = sliderYMin;
+
+		public void SetCoordinateSystemBoundary(RectangleF coordinateSystemBoundaries)
+		{
+			transformer.XMin = coordinateSystemBoundaries.Left;
+			transformer.XMax = coordinateSystemBoundaries.Right;
+			transformer.YMin = coordinateSystemBoundaries.Top;
+			transformer.YMax = coordinateSystemBoundaries.Bottom;
 			transformer.UpdateTransformer();
 		}
-		public PointF PixelToMath(float x, float y) {
-		    return transformer.PixelToMath(new PointF(x, y));
+
+		public RectangleF GetCoordinateSystemBoundary()
+		{
+			return new RectangleF(transformer.XMin, transformer.YMin, transformer.XMax - transformer.XMin, transformer.YMax - transformer.YMin);
+		}
+
+		public PointF PixelToMath(float x, float y)
+		{
+			return transformer.PixelToMath(new PointF(x, y));
 		}
 		
+		public void MoveCoordinateSystemCenter(float xOff, float yOff)
+		{
+			transformer.XMin += xOff;
+			transformer.XMax += xOff;
+			transformer.YMin += yOff;
+			transformer.YMax += yOff;
+			transformer.UpdateTransformer();
+		}
 
 		public void AddPoint(int graphIdx, PointF point)
 		{
 			this.graphs[graphIdx].AddPoint(point, this.transformer);
 		}
 
-		void UpdateTransformerPixel(int width, int height) {
-			if (transformer.VPWidthPX != width || transformer.VPHeightPX != width) {
+		void UpdateTransformerPixel(int width, int height)
+		{
+			if (transformer.VPWidthPX != width || transformer.VPHeightPX != width)
+			{
 				transformer.VPWidthPX = width;
 				transformer.VPHeightPX = height;
 				transformer.UpdateTransformer();
-				for (int i = 0; i < graphs.Count; i++) {
+				for (int i = 0; i < graphs.Count; i++)
+				{
 					this.graphs[i].UpdatePlot(this.transformer);
 				}
 			}
 		}
 
-		public void Paint(int width, int height, Graphics g) {
+		public void Paint(int width, int height, Graphics g)
+		{
 			this.UpdateTransformerPixel(width, height);
-			this.viewport.PaintCoordinateSystem(transformer, g);
-			for (int i = 0; i < graphs.Count; i++)  {
-				this.viewport.PaintGraph(this.graphs[i], g);
+			this.Viewport.PaintCoordinateSystem(transformer, g);
+			for (int i = 0; i < graphs.Count; i++)
+			{
+				this.Viewport.PaintGraph(this.graphs[i], g);
 			}
 		}
-		public Analysis GetAnalysis(int graphIdx) 
+		public Analysis GetAnalysis(int graphIdx)
 		{
-    		return graphs[graphIdx].Analysis;
+			return graphs[graphIdx].Analysis;
 		}
 	}
 }

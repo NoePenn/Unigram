@@ -27,15 +27,15 @@ namespace Unigram
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
-			
+
 			u = new Unigram();
 			int graph = u.AddGraph(Color.Red);
-			
-			for (float x = -5; x <= 5; x += 0.01f)
+
+			for (float x = -100; x <= 100; x += 0.01f)
 			{
 				u.AddPoint(graph, new PointF(x, (float)Math.Sin(x)));
 			}

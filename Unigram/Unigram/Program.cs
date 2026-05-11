@@ -26,6 +26,6 @@ namespace Unigram
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainForm());
 		}
-		
+
 	}
 }
