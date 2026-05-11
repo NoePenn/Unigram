@@ -69,5 +69,9 @@ namespace Unigram
 				this.viewport.PaintGraph(this.graphs[i], g);
 			}
 		}
+		public Analysis GetAnalysis(int graphIdx) 
+		{
+    		return graphs[graphIdx].Analysis;
+		}
 	}
 }
