@@ -456,18 +456,6 @@ namespace Unigram
 				result = FirstDerivative(result);
 			}
 			return result;
-			/*switch (degree) 
-			{
-				case 1:
-					return FirstDerivative(points);
-				case 2:
-					return FirstDerivative(FirstDerivative(points) );
-				case 3:
-					return FirstDerivative(FirstDerivative(FirstDerivative(points) ) );
-				
-				default:
-					return points
-			}*/
 		}
 		/// <summary>
 		/// Calculates the horizontal range of the dataset.

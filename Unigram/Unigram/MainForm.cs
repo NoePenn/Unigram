@@ -37,8 +37,11 @@ namespace Unigram
 
 			for (float x = -100; x <= 100; x += 0.01f)
 			{
-				u.AddPoint(graph, new PointF(x, (float)Math.Sin(x)));
+				u.AddPoint(graph, new PointF(x, (float)Math.Pow(x, 2)));
 			}
 		}
+		
+        
+
 	}
 }

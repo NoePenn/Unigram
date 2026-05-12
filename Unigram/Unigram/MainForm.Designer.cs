@@ -80,7 +80,6 @@ namespace Unigram
 			if ((e != null) && (e.ClipRectangle != null))
 			{
 			}
-			// v.PixelCrafter(e, e.ClipRectangle.Width, e.ClipRectangle.Height, trackBarValue);
 			u.Paint(e.ClipRectangle.Width, e.ClipRectangle.Height, e.Graphics);
 		}
 

@@ -53,15 +53,22 @@ namespace Unigram
                 float newX = mouseInMath.X - (relativeX * newWidth);
                 float newY = mouseInMath.Y - (relativeY * newHeight);
                 u.SetCoordinateSystemBoundary(new RectangleF(newX, newY, newWidth, newHeight));
-                u.Viewport.MajorX = (float)Math.Pow(10, Math.Floor(Math.Log10(newHeight * 5))) / 10;
-                u.Viewport.MajorY = u.Viewport.MajorX;
-                u.Viewport.MinorX = u.Viewport.MajorX / 5;
-                u.Viewport.MinorY = u.Viewport.MajorY / 5;
+                AdjustLines();
                 button1.Invalidate();
             };
+            
+            
 
             // Wichtig: Damit das MouseWheel-Event gefeuert wird, muss der Button fokussierbar sein
             button1.MouseEnter += (s, ev) => button1.Focus();
+        }
+        void AdjustLines() {
+        	var bounds = u.GetCoordinateSystemBoundary();
+			float major = (float)Math.Pow(10, Math.Floor(Math.Log10(bounds.Height * 5)));
+            u.Viewport.MajorX = major / 10;
+            u.Viewport.MajorY = major / 10;
+            u.Viewport.MinorX = u.Viewport.MajorX / 5;
+            u.Viewport.MinorY = u.Viewport.MajorY / 5;
         }
     }
 }

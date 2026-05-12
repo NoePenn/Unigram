@@ -70,7 +70,7 @@ namespace Unigram
 
 		void UpdateTransformerPixel(int width, int height)
 		{
-			if (transformer.VPWidthPX != width || transformer.VPHeightPX != width)
+			if (true || transformer.VPWidthPX != width || transformer.VPHeightPX != height)
 			{
 				transformer.VPWidthPX = width;
 				transformer.VPHeightPX = height;
@@ -84,6 +84,8 @@ namespace Unigram
 
 		public void Paint(int width, int height, Graphics g)
 		{
+			transformer.VPWidthPX = width;
+			transformer.VPHeightPX = height;
 			this.UpdateTransformerPixel(width, height);
 			this.Viewport.PaintCoordinateSystem(transformer, g);
 			for (int i = 0; i < graphs.Count; i++)
