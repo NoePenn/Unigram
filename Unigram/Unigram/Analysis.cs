@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: noepe
  * Date: 14.04.2026
@@ -20,13 +20,6 @@ namespace Unigram
 	/// For accurate results in interpolation and calculus methods, points must be 
 	/// sorted by their X-coordinate.
 	/// </remarks>
-
-	/* 
-	 * LinearRegression(): Calculates the y=mx+d that best represents the trend of your points. returns slope of that line
-	 * BoundingBox(): Returns a RectangleF that perfectly encloses all points.
-	 * //ScaleY(float factor): Multiplies all Y values by a number (e.g., to convert units).
-	 * //ShiftY(float offset): Adds a number to all Y values (e.g., to move a graph up or down)
-	 */
 
 	public class Analysis
 	{
@@ -418,15 +411,6 @@ namespace Unigram
 			}
 			return (float)Math.Sqrt(sumSquares / points.Count);
 		}
-		/*/// <summary>
-		/// Finds all points where this graph intersects with another graph.
-		/// </summary>
-		/// <param name="other">The other Analysis object to compare against.</param>
-		/// <returns>A list of PointF where the two curves cross.</returns>
-		public List<PointF> IntersectionsWith(Analysis other)
-		{
-			return new List<PointF>();
-		}*/
 		/// <summary>
 		/// Internal helper to calculate the first derivative of a specific list of points.
 		/// </summary>
