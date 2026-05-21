@@ -465,11 +465,7 @@ namespace Unigram
 		{
 			List<PointF> normalize = new List<PointF>();
 			float max = (float)Math.Max(Math.Abs(Max().Y), Math.Abs(Min().Y));
-			/*if( Math.Abs(Max().Y ) > Math.Abs(Min().Y ) )
-				max = Math.Abs( Max().Y );
-			else 
-				max = Math.Abs( Min().Y );
-			*/
+
 			for (int i = 0; i < points.Count; i++)
 			{
 				normalize.Add(new PointF(points[i].X, points[i].Y / max));
